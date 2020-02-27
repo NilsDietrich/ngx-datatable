@@ -1,6 +1,6 @@
-import { TableColumnProp } from '../types/table-column.type';
 
 // maybe rename this file to prop-getters.ts
+import { TableColumnProp } from '../components/datatable.interface';
 
 export type ValueGetter = (obj: any, prop: TableColumnProp) => any;
 

@@ -8,38 +8,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
-import { MouseEvent } from '../../events';
-import { SortType } from '../../types/sort.type';
-import { SelectionType } from '../../types/selection.type';
-import { TableColumn } from '../../types/table-column.type';
-import { nextSortDir } from '../../utils/sort';
-import { SortDirection } from '../../types/sort-direction.type';
+import { MouseEvent } from '../../../events';
+import { nextSortDir } from '../../../utils/sort';
+import { SelectionType, SortDirection, SortType, TableColumn } from '../../datatable.interface';
 
 @Component({
   selector: 'datatable-header-cell',
-  template: `
-    <div class="datatable-header-cell-template-wrap">
-      <ng-template
-        *ngIf="isTarget"
-        [ngTemplateOutlet]="targetMarkerTemplate"
-        [ngTemplateOutletContext]="targetMarkerContext"
-      >
-      </ng-template>
-      <label *ngIf="isCheckboxable" class="datatable-checkbox">
-        <input type="checkbox" [checked]="allRowsSelected" (change)="select.emit(!allRowsSelected)" />
-      </label>
-      <span *ngIf="!column.headerTemplate" class="datatable-header-cell-wrapper">
-        <span class="datatable-header-cell-label draggable" (click)="onSort()" [innerHTML]="name"> </span>
-      </span>
-      <ng-template
-        *ngIf="column.headerTemplate"
-        [ngTemplateOutlet]="column.headerTemplate"
-        [ngTemplateOutletContext]="cellContext"
-      >
-      </ng-template>
-      <span (click)="onSort()" [class]="sortClass"> </span>
-    </div>
-  `,
+  templateUrl: 'header-cell.component.html',
   host: {
     class: 'datatable-header-cell'
   },
@@ -100,8 +75,12 @@ export class DataTableHeaderCellComponent {
   get columnCssClasses(): any {
     let cls = 'datatable-header-cell';
 
-    if (this.column.sortable) cls += ' sortable';
-    if (this.column.resizeable) cls += ' resizeable';
+    if (this.column.sortable) {
+      cls += ' sortable';
+    }
+    if (this.column.resizeable) {
+      cls += ' resizeable';
+    }
     if (this.column.headerClass) {
       if (typeof this.column.headerClass === 'string') {
         cls += ' ' + this.column.headerClass;
@@ -115,7 +94,9 @@ export class DataTableHeaderCellComponent {
         } else if (typeof res === 'object') {
           const keys = Object.keys(res);
           for (const k of keys) {
-            if (res[k] === true) cls += ` ${k}`;
+            if (res[k] === true) {
+              cls += ` ${k}`;
+            }
           }
         }
       }
@@ -170,11 +151,12 @@ export class DataTableHeaderCellComponent {
   private _column: TableColumn;
   private _sorts: any[];
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef) {
+  }
 
   @HostListener('contextmenu', ['$event'])
   onContextmenu($event: MouseEvent): void {
-    this.columnContextmenu.emit({ event: $event, column: this.column });
+    this.columnContextmenu.emit({event: $event, column: this.column});
   }
 
   calcSortDir(sorts: any[]): any {
@@ -183,12 +165,16 @@ export class DataTableHeaderCellComponent {
         return s.prop === this.column.prop;
       });
 
-      if (sort) return sort.dir;
+      if (sort) {
+        return sort.dir;
+      }
     }
   }
 
-  onSort(): void {
-    if (!this.column.sortable) return;
+  onSort() {
+    if (!this.column.sortable) {
+      return;
+    }
 
     const newValue = nextSortDir(this.sortType, this.sortDir);
     this.sort.emit({

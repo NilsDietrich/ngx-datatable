@@ -1,14 +1,16 @@
+import { TableColumn } from '../components/datatable.interface';
 import { camelCase, deCamelCase } from './camel-case';
 import { id } from './id';
 import { getterForProp } from './column-prop-getters';
-import { TableColumn } from '../types/table-column.type';
 import { DataTableColumnDirective } from '../components/columns/column.directive';
 
 /**
  * Sets the column defaults
  */
 export function setColumnDefaults(columns: TableColumn[]) {
-  if (!columns) return;
+  if (!columns) {
+    return;
+  }
 
   // Only one column should hold the tree view
   // Thus if multiple columns are provided with

@@ -1,9 +1,9 @@
 import { Directive, TemplateRef, ContentChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { TableColumnProp } from '../datatable.interface';
 import { DataTableColumnHeaderDirective } from './column-header.directive';
 import { DataTableColumnCellDirective } from './column-cell.directive';
-import { DataTableColumnCellTreeToggle } from './tree.directive';
+import { DataTableColumnCellTreeToggleDirective } from './tree.directive';
 import { ColumnChangesService } from '../../services/column-changes.service';
-import { TableColumnProp } from '../../types/table-column.type';
 
 @Directive({ selector: 'ngx-datatable-column' })
 export class DataTableColumnDirective implements OnChanges {
@@ -53,7 +53,7 @@ export class DataTableColumnDirective implements OnChanges {
   @Input('treeToggleTemplate')
   _treeToggleTemplateInput: TemplateRef<any>;
 
-  @ContentChild(DataTableColumnCellTreeToggle, { read: TemplateRef, static: true })
+  @ContentChild(DataTableColumnCellTreeToggleDirective, { read: TemplateRef, static: true })
   _treeToggleTemplateQuery: TemplateRef<any>;
 
   get treeToggleTemplate(): TemplateRef<any> {

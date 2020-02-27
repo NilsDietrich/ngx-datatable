@@ -19,26 +19,21 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   SkipSelf,
-  OnDestroy,
   Optional,
-  Inject
+  Inject, AfterContentInit
 } from '@angular/core';
 
-import { DatatableGroupHeaderDirective } from './body/body-group-header.directive';
+import { DatatableGroupHeaderDirective } from './body/body-group-header/body-group-header.directive';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { INgxDatatableConfig } from '../ngx-datatable.module';
+import { NgxDatatableConfig } from '../ngx-datatable.module';
 import { groupRowsByParents, optionalGetterForProp } from '../utils/tree';
-import { TableColumn } from '../types/table-column.type';
 import { setColumnDefaults, translateTemplates } from '../utils/column-helper';
-import { ColumnMode } from '../types/column-mode.type';
-import { SelectionType } from '../types/selection.type';
-import { SortType } from '../types/sort.type';
-import { ContextmenuType } from '../types/contextmenu.type';
 import { DataTableColumnDirective } from './columns/column.directive';
+import { ColumnMode, ContextmenuType, SelectionType, SortType, TableColumn } from './datatable.interface';
 import { DatatableRowDetailDirective } from './row-detail/row-detail.directive';
 import { DatatableFooterDirective } from './footer/footer.directive';
-import { DataTableBodyComponent } from './body/body.component';
+import { DataTableBodyComponent } from './body/body-component/body.component';
 import { DataTableHeaderComponent } from './header/header.component';
 import { ScrollbarHelper } from '../services/scrollbar-helper.service';
 import { ColumnChangesService } from '../services/column-changes.service';
@@ -57,15 +52,11 @@ import { sortRows } from '../utils/sort';
     class: 'ngx-datatable'
   }
 })
-export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
-  /**
-   * Template for the target marker of drag target columns.
-   */
+export class DatatableComponent implements OnInit, DoCheck, AfterViewInit, AfterContentInit {
+  /** Template for the target marker of drag target columns. */
   @Input() targetMarkerTemplate: any;
 
-  /**
-   * Rows that are displayed in the table.
-   */
+  /** Rows that are displayed in the table. */
   @Input() set rows(val: any) {
     this._rows = val;
 
@@ -85,8 +76,7 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
       optionalGetterForProp(this.treeToRelation)
     );
 
-    // recalculate sizes/etc
-    this.recalculate();
+    this.recalculate(); // recalculate sizes/etc
 
     if (this._rows && this._groupRowsBy) {
       // If a column has been specified in _groupRowsBy created a new array with the data grouped by that row
@@ -96,16 +86,12 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
     this.cd.markForCheck();
   }
 
-  /**
-   * Gets the rows.
-   */
+  /** Gets the rows. */
   get rows(): any {
     return this._rows;
   }
 
-  /**
-   * This attribute allows the user to set the name of the column to group the data with
-   */
+  /** This attribute allows the user to set the name of the column to group the data with */
   @Input() set groupRowsBy(val: string) {
     if (val) {
       this._groupRowsBy = val;
@@ -137,9 +123,7 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    */
   @Input() groupedRows: any[];
 
-  /**
-   * Columns to be displayed.
-   */
+  /** Columns to be displayed.*/
   @Input() set columns(val: TableColumn[]) {
     if (val) {
       this._internalColumns = [...val];
@@ -150,88 +134,50 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
     this._columns = val;
   }
 
-  /**
-   * Get the columns.
-   */
+  /** Get the columns. */
   get columns(): TableColumn[] {
     return this._columns;
   }
 
-  /**
-   * List of row objects that should be
-   * represented as selected in the grid.
-   * Default value: `[]`
-   */
+  /** List of row objects that should be represented as selected in the grid. Default value: `[]` */
   @Input() selected: any[] = [];
 
-  /**
-   * Enable vertical scrollbars
-   */
+  /** Enable vertical scrollbars */
   @Input() scrollbarV: boolean = false;
 
-  /**
-   * Enable horz scrollbars
-   */
+  /** Enable horz scrollbars */
   @Input() scrollbarH: boolean = false;
 
-  /**
-   * The row height; which is necessary
-   * to calculate the height for the lazy rendering.
-   */
+  /** The row height; which is necessary to calculate the height for the lazy rendering. */
   @Input() rowHeight: number | 'auto' | ((row?: any) => number) = 30;
 
-  /**
-   * Type of column width distribution formula.
-   * Example: flex, force, standard
-   */
+  /** Type of column width distribution formula. Example: flex, force, standard */
   @Input() columnMode: ColumnMode = ColumnMode.standard;
 
-  /**
-   * The minimum header height in pixels.
-   * Pass a falsey for no header
-   */
+  /** The minimum header height in pixels. Pass a falsey for no header */
   @Input() headerHeight: any = 30;
 
-  /**
-   * The minimum footer height in pixels.
-   * Pass falsey for no footer
-   */
+  /** The minimum footer height in pixels. Pass falsey for no footer */
   @Input() footerHeight: number = 0;
 
-  /**
-   * If the table should use external paging
-   * otherwise its assumed that all data is preloaded.
-   */
+  /** If the table should use external paging otherwise its assumed that all data is preloaded. */
   @Input() externalPaging: boolean = false;
 
-  /**
-   * If the table should use external sorting or
-   * the built-in basic sorting.
-   */
+  /** If the table should use external sorting or the built-in basic sorting. */
   @Input() externalSorting: boolean = false;
 
-  /**
-   * The page size to be shown.
-   * Default value: `undefined`
-   */
+  /** The page size to be shown. Default value: `undefined` */
   @Input() set limit(val: number | undefined) {
     this._limit = val;
-
-    // recalculate sizes/etc
-    this.recalculate();
+    this.recalculate(); // recalculate sizes/etc
   }
 
-  /**
-   * Gets the limit.
-   */
+  /** Gets the limit. */
   get limit(): number | undefined {
     return this._limit;
   }
 
-  /**
-   * The total count of all rows.
-   * Default value: `0`
-   */
+  /** The total count of all rows. Default value: `0` */
   @Input() set count(val: number) {
     this._count = val;
 
@@ -239,17 +185,12 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
     this.recalculate();
   }
 
-  /**
-   * Gets the count.
-   */
+  /** Gets the count. */
   get count(): number {
     return this._count;
   }
 
-  /**
-   * The current offset ( page - 1 ) shown.
-   * Default value: `0`
-   */
+  /** The current offset ( page - 1 ) shown. Default value: `0` */
   @Input() set offset(val: number) {
     this._offset = val;
   }
@@ -257,10 +198,7 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
     return Math.max(Math.min(this._offset, Math.ceil(this.rowCount / this.pageSize) - 1), 0);
   }
 
-  /**
-   * Show the linear loading bar.
-   * Default value: `false`
-   */
+  /** Show the linear loading bar. Default value: `false` */
   @Input() loadingIndicator: boolean = false;
 
   /**
@@ -277,32 +215,19 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    */
   @Input() selectionType: SelectionType;
 
-  /**
-   * Enable/Disable ability to re-order columns
-   * by dragging them.
-   */
+  /** Enable/Disable ability to re-order columns by dragging them. */
   @Input() reorderable: boolean = true;
 
-  /**
-   * Swap columns on re-order columns or
-   * move them.
-   */
+  /** Swap columns on re-order columns or move them. */
   @Input() swapColumns: boolean = true;
 
-  /**
-   * The type of sorting
-   */
+  /** The type of sorting */
   @Input() sortType: SortType = SortType.single;
 
-  /**
-   * Array of sorted columns by property and type.
-   * Default value: `[]`
-   */
+  /** Array of sorted columns by property and type. Default value: `[]` */
   @Input() sorts: any[] = [];
 
-  /**
-   * Css class overrides
-   */
+  /** Css class overrides */
   @Input() cssClasses: any = {
     sortAscending: 'datatable-icon-up',
     sortDescending: 'datatable-icon-down',
@@ -320,15 +245,9 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    * selectedMessage  [default] = 'selected'
    */
   @Input() messages: any = {
-    // Message to show when array is presented
-    // but contains no values
-    emptyMessage: 'No data to display',
-
-    // Footer total message
-    totalMessage: 'total',
-
-    // Footer selected message
-    selectedMessage: 'selected'
+    emptyMessage: 'No data to display', // Message to show when array is presented but contains no values
+    totalMessage: 'total', // Footer total message
+    selectedMessage: 'selected' // Footer selected message
   };
 
   /**
@@ -367,10 +286,7 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    */
   @Input() groupExpansionDefault: boolean = false;
 
-  /**
-   * Property to which you can use for custom tracking of rows.
-   * Example: 'name'
-   */
+  /** Property to which you can use for custom tracking of rows. Example: 'name' */
   @Input() trackByProp: string;
 
   /**
@@ -381,69 +297,43 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    */
   @Input() selectAllRowsOnPage = false;
 
-  /**
-   * A flag for row virtualization on / off
-   */
+  /** A flag for row virtualization on / off */
   @Input() virtualization: boolean = true;
 
-  /**
-   * Tree from relation
-   */
+  /** Tree from relation */
   @Input() treeFromRelation: string;
 
-  /**
-   * Tree to relation
-   */
+  /** Tree to relation */
   @Input() treeToRelation: string;
 
-  /**
-   * A flag for switching summary row on / off
-   */
+  /** A flag for switching summary row on / off */
   @Input() summaryRow: boolean = false;
 
-  /**
-   * A height of summary row
-   */
+  /** A height of summary row */
   @Input() summaryHeight: number = 30;
 
-  /**
-   * A property holds a summary row position: top/bottom
-   */
+  /** A property holds a summary row position: top/bottom */
   @Input() summaryPosition: string = 'top';
 
-  /**
-   * Body was scrolled typically in a `scrollbarV:true` scenario.
-   */
+  /** Body was scrolled typically in a `scrollbarV:true` scenario. */
   @Output() scroll: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * A cell or row was focused via keyboard or mouse click.
-   */
+  /** A cell or row was focused via keyboard or mouse click. */
   @Output() activate: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * A cell or row was selected.
-   */
+  /** A cell or row was selected. */
   @Output() select: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * Column sort was invoked.
-   */
+  /** Column sort was invoked. */
   @Output() sort: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * The table was paged either triggered by the pager or the body scroll.
-   */
+  /** The table was paged either triggered by the pager or the body scroll. */
   @Output() page: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * Columns were re-ordered.
-   */
+  /** Columns were re-ordered. */
   @Output() reorder: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * Column was resized.
-   */
+  /** Column was resized. */
   @Output() resize: EventEmitter<any> = new EventEmitter();
 
   /**
@@ -453,143 +343,101 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    */
   @Output() tableContextmenu = new EventEmitter<{ event: MouseEvent; type: ContextmenuType; content: any }>(false);
 
-  /**
-   * A row was expanded ot collapsed for tree
-   */
+  /** A row was expanded ot collapsed for tree */
   @Output() treeAction: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * CSS class applied if the header height if fixed height.
-   */
+  /** CSS class applied if the header height if fixed height. */
   @HostBinding('class.fixed-header')
   get isFixedHeader(): boolean {
     const headerHeight: number | string = this.headerHeight;
     return typeof headerHeight === 'string' ? <string>headerHeight !== 'auto' : true;
   }
 
-  /**
-   * CSS class applied to the root element if
-   * the row heights are fixed heights.
-   */
+  /** CSS class applied to the root element if the row heights are fixed heights. */
   @HostBinding('class.fixed-row')
   get isFixedRow(): boolean {
     return this.rowHeight !== 'auto';
   }
 
-  /**
-   * CSS class applied to root element if
-   * vertical scrolling is enabled.
-   */
+  /** CSS class applied to root element if vertical scrolling is enabled. */
   @HostBinding('class.scroll-vertical')
   get isVertScroll(): boolean {
     return this.scrollbarV;
   }
 
-  /**
-   * CSS class applied to root element if
-   * virtualization is enabled.
-   */
+  /** CSS class applied to root element if virtualization is enabled. */
   @HostBinding('class.virtualized')
   get isVirtualized(): boolean {
     return this.virtualization;
   }
 
-  /**
-   * CSS class applied to the root element
-   * if the horziontal scrolling is enabled.
-   */
+  /** CSS class applied to the root element if the horziontal scrolling is enabled. */
   @HostBinding('class.scroll-horz')
   get isHorScroll(): boolean {
     return this.scrollbarH;
   }
 
-  /**
-   * CSS class applied to root element is selectable.
-   */
+  /** CSS class applied to root element is selectable. */
   @HostBinding('class.selectable')
   get isSelectable(): boolean {
     return this.selectionType !== undefined;
   }
 
-  /**
-   * CSS class applied to root is checkbox selection.
-   */
+  /** CSS class applied to root is checkbox selection. */
   @HostBinding('class.checkbox-selection')
   get isCheckboxSelection(): boolean {
     return this.selectionType === SelectionType.checkbox;
   }
 
-  /**
-   * CSS class applied to root if cell selection.
-   */
+  /** CSS class applied to root if cell selection. */
   @HostBinding('class.cell-selection')
   get isCellSelection(): boolean {
     return this.selectionType === SelectionType.cell;
   }
 
-  /**
-   * CSS class applied to root if single select.
-   */
+  /** CSS class applied to root if single select. */
   @HostBinding('class.single-selection')
   get isSingleSelection(): boolean {
     return this.selectionType === SelectionType.single;
   }
 
-  /**
-   * CSS class added to root element if mulit select
-   */
+  /** CSS class added to root element if mulit select */
   @HostBinding('class.multi-selection')
   get isMultiSelection(): boolean {
     return this.selectionType === SelectionType.multi;
   }
 
-  /**
-   * CSS class added to root element if mulit click select
-   */
+  /** CSS class added to root element if mulit click select */
   @HostBinding('class.multi-click-selection')
   get isMultiClickSelection(): boolean {
     return this.selectionType === SelectionType.multiClick;
   }
 
-  /**
-   * Column templates gathered from `ContentChildren`
-   * if described in your markup.
-   */
+  /** Column templates gathered from `ContentChildren` if described in your markup. */
   @ContentChildren(DataTableColumnDirective)
   set columnTemplates(val: QueryList<DataTableColumnDirective>) {
     this._columnTemplates = val;
     this.translateColumns(val);
   }
 
-  /**
-   * Returns the column templates.
-   */
+  /** Returns the column templates. */
   get columnTemplates(): QueryList<DataTableColumnDirective> {
     return this._columnTemplates;
   }
 
-  /**
-   * Row Detail templates gathered from the ContentChild
-   */
+  /** Row Detail templates gathered from the ContentChild */
   @ContentChild(DatatableRowDetailDirective, { static: false })
   rowDetail: DatatableRowDetailDirective;
 
-  /**
-   * Group Header templates gathered from the ContentChild
-   */
+  /** Group Header templates gathered from the ContentChild */
   @ContentChild(DatatableGroupHeaderDirective, { static: false })
   groupHeader: DatatableGroupHeaderDirective;
 
-  /**
-   * Footer template gathered from the ContentChild
-   */
+  /** Footer template gathered from the ContentChild */
   @ContentChild(DatatableFooterDirective, { static: false })
   footer: DatatableFooterDirective;
 
-  /**
-   * Reference to the body component for manually
-   * invoking functions on the body.
-   */
+  /** Reference to the body component for manually invoking functions on the body. */
   @ViewChild(DataTableBodyComponent, { static: false })
   bodyComponent: DataTableBodyComponent;
 
@@ -643,7 +491,7 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
     element: ElementRef,
     differs: KeyValueDiffers,
     private columnChangesService: ColumnChangesService,
-    @Optional() @Inject('configuration') private configuration: INgxDatatableConfig
+    @Optional() @Inject('configuration') private configuration: NgxDatatableConfig
   ) {
     // get ref to elm for measuring
     this.element = element.nativeElement;

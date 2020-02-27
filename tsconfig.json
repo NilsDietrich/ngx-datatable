@@ -20,10 +20,10 @@
     ],
     "paths": {
       "dynamic-data": [
-        "dist/ngx-datatable-reboot"
+        "dist/dynamic-data"
       ],
       "dynamic-data/*": [
-        "dist/ngx-datatable-reboot/*"
+        "dist/dynamic-data/*"
       ]
     }
   },
@@ -32,4 +32,3 @@
     "strictInjectionParameters": true
   }
 }
-

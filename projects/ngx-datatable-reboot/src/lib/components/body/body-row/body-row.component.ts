@@ -14,39 +14,16 @@ import {
   SkipSelf
 } from '@angular/core';
 
-import { TreeStatus } from './body-cell.component';
-import { columnsByPin, columnGroupWidths, columnsByPinArr } from '../../utils/column';
-import { Keys } from '../../utils/keys';
-import { ScrollbarHelper } from '../../services/scrollbar-helper.service';
-import { translateXY } from '../../utils/translate';
+import { TreeStatus } from '../body-cell/body-cell.component';
+import { columnsByPin, columnGroupWidths, columnsByPinArr } from '../../../utils/column';
+import { Keys } from '../../../utils/keys';
+import { ScrollbarHelper } from '../../../services/scrollbar-helper.service';
+import { translateXY } from '../../../utils/translate';
 
 @Component({
   selector: 'datatable-body-row',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div
-      *ngFor="let colGroup of _columnsByPin; let i = index; trackBy: trackByGroups"
-      class="datatable-row-{{ colGroup.type }} datatable-row-group"
-      [ngStyle]="_groupStyles[colGroup.type]"
-    >
-      <datatable-body-cell
-        *ngFor="let column of colGroup.columns; let ii = index; trackBy: columnTrackingFn"
-        tabindex="-1"
-        [row]="row"
-        [group]="group"
-        [expanded]="expanded"
-        [isSelected]="isSelected"
-        [rowIndex]="rowIndex"
-        [column]="column"
-        [rowHeight]="rowHeight"
-        [displayCheck]="displayCheck"
-        [treeStatus]="treeStatus"
-        (activate)="onActivate($event, ii)"
-        (treeAction)="onTreeAction()"
-      >
-      </datatable-body-cell>
-    </div>
-  `
+  templateUrl: 'body-row.component.html'
 })
 export class DataTableBodyRowComponent implements DoCheck {
   @Input() set columns(val: any[]) {

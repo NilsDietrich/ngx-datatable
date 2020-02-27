@@ -10,35 +10,12 @@ import {
   ChangeDetectorRef,
   KeyValueDiffers
 } from '@angular/core';
-import { MouseEvent } from '../../events';
+import { MouseEvent } from '../../../events';
 
 @Component({
   selector: 'datatable-row-wrapper',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div *ngIf="groupHeader && groupHeader.template" class="datatable-group-header" [ngStyle]="getGroupHeaderStyle()">
-      <ng-template
-        *ngIf="groupHeader && groupHeader.template"
-        [ngTemplateOutlet]="groupHeader.template"
-        [ngTemplateOutletContext]="groupContext"
-      >
-      </ng-template>
-    </div>
-    <ng-content *ngIf="(groupHeader && groupHeader.template && expanded) || (!groupHeader || !groupHeader.template)">
-    </ng-content>
-    <div
-      *ngIf="rowDetail && rowDetail.template && expanded"
-      [style.height.px]="detailRowHeight"
-      class="datatable-row-detail"
-    >
-      <ng-template
-        *ngIf="rowDetail && rowDetail.template"
-        [ngTemplateOutlet]="rowDetail.template"
-        [ngTemplateOutletContext]="rowContext"
-      >
-      </ng-template>
-    </div>
-  `,
+  templateUrl: 'body-row-wrapper.component.html',
   host: {
     class: 'datatable-row-wrapper'
   }

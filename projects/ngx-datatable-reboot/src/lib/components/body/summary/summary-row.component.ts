@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, PipeTransform, TemplateRef } from '@angular/core';
 
-export interface ISummaryColumn {
+export interface SummaryColumn {
   summaryFunc?: (cells: any[]) => any;
   summaryTemplate?: TemplateRef<any>;
 
@@ -27,32 +27,20 @@ function noopSumFunc(cells: any[]): void {
 
 @Component({
   selector: 'datatable-summary-row',
-  template: `
-    <datatable-body-row
-      *ngIf="summaryRow && _internalColumns"
-      tabindex="-1"
-      [innerWidth]="innerWidth"
-      [offsetX]="offsetX"
-      [columns]="_internalColumns"
-      [rowHeight]="rowHeight"
-      [row]="summaryRow"
-      [rowIndex]="-1"
-    >
-    </datatable-body-row>
-  `,
+  templateUrl: 'summary-row.component.html',
   host: {
     class: 'datatable-summary-row'
   }
 })
 export class DataTableSummaryRowComponent implements OnChanges {
   @Input() rows: any[];
-  @Input() columns: ISummaryColumn[];
+  @Input() columns: SummaryColumn[];
 
   @Input() rowHeight: number;
   @Input() offsetX: number;
   @Input() innerWidth: number;
 
-  _internalColumns: ISummaryColumn[];
+  internalColumns: SummaryColumn[];
   summaryRow: any = {};
 
   ngOnChanges() {
@@ -64,7 +52,7 @@ export class DataTableSummaryRowComponent implements OnChanges {
   }
 
   private updateInternalColumns() {
-    this._internalColumns = this.columns.map(col => ({
+    this.internalColumns = this.columns.map(col => ({
       ...col,
       cellTemplate: col.summaryTemplate
     }));
@@ -85,7 +73,7 @@ export class DataTableSummaryRowComponent implements OnChanges {
       });
   }
 
-  private getSummaryFunction(column: ISummaryColumn): (a: any[]) => any {
+  private getSummaryFunction(column: SummaryColumn): (a: any[]) => any {
     if (column.summaryFunc === undefined) {
       return defaultSumFunc;
     } else if (column.summaryFunc === null) {

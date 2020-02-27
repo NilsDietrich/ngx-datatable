@@ -3,7 +3,7 @@ import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { addMatchers } from '../../test';
-import { DataTablePagerComponent } from './pager.component';
+import { DataTablePagerComponent } from './pager/pager.component';
 import { DataTableFooterComponent } from './footer.component';
 
 let fixture: ComponentFixture<TestFixtureComponent>;

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { SelectionType } from '../../types/selection.type';
-import { selectRowsBetween, selectRows } from '../../utils/selection';
-import { Keys } from '../../utils/keys';
+import { selectRowsBetween, selectRows } from '../../../utils/selection';
+import { Keys } from '../../../utils/keys';
+import { SelectionType } from '../../datatable.interface';
 
 export interface Model {
   type: string;

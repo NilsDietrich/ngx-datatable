@@ -4,14 +4,18 @@
     "directive-selector": [
       true,
       "attribute",
-      "insight",
+      "datatable",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "insight",
+      "datatable",
       "kebab-case"
+    ],
+    "variable-name": [
+      true,
+      "allow-leading-underscore"
     ]
   }
 }

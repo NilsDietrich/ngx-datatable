@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColumnMode } from 'projects/ngx-datatable-reboot/src/public-api';
+import { ColumnMode } from 'projects/ngx-datatable-reboot/src/lib/components/datatable.interface';
 
 @Component({
   selector: 'app-basic-auto-demo',

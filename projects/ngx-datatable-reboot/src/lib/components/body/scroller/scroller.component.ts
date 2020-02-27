@@ -12,7 +12,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { MouseEvent } from '../../events';
+import { MouseEvent } from '../../../events';
 
 @Component({
   selector: 'datatable-scroller',
@@ -76,7 +76,7 @@ export class ScrollerComponent implements OnInit, OnDestroy {
   }
 
   onScrolled(event: MouseEvent): void {
-    const dom: Element = <Element>event.currentTarget;
+    const dom: Element = event.currentTarget as Element;
     requestAnimationFrame(() => {
       this.scrollYPos = dom.scrollTop;
       this.scrollXPos = dom.scrollLeft;

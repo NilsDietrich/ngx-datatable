@@ -6,19 +6,19 @@
 export * from './lib/ngx-datatable.module';
 export * from './lib/components/datatable.component';
 export * from './lib/components/header/header.component';
-export * from './lib/components/header/header-cell.component';
-export * from './lib/components/body/body.component';
-export * from './lib/components/body/body-cell.component';
-export * from './lib/components/body/body-row.component';
-export * from './lib/components/body/progress-bar.component';
-export * from './lib/components/body/scroller.component';
-export * from './lib/components/body/body-row-wrapper.component';
-export * from './lib/components/body/selection.component';
-export * from './lib/components/body/body-group-header.directive';
-export * from './lib/components/body/body-group-header-template.directive';
+export * from './lib/components/header/header-cell/header-cell.component';
+export * from './lib/components/body/body-component/body.component';
+export * from './lib/components/body/body-cell/body-cell.component';
+export * from './lib/components/body/body-row/body-row.component';
+export * from './lib/components/body/progress-bar/progress-bar.component';
+export * from './lib/components/body/scroller/scroller.component';
+export * from './lib/components/body/body-row-wrapper/body-row-wrapper.component';
+export * from './lib/components/body/selection/selection.component';
+export * from './lib/components/body/body-group-header/body-group-header.directive';
+export * from './lib/components/body/body-group-header/body-group-header-template.directive';
 export * from './lib/components/body/summary/summary-row.component';
 export * from './lib/components/footer/footer.component';
-export * from './lib/components/footer/pager.component';
+export * from './lib/components/footer/pager/pager.component';
 export * from './lib/components/footer/footer.directive';
 export * from './lib/components/footer/footer-template.directive';
 export * from './lib/components/columns/column.directive';
@@ -41,14 +41,7 @@ export * from './lib/services/dimensions-helper.service';
 export * from './lib/services/column-changes.service';
 
 // types
-export * from './lib/types/column-mode.type';
-export * from './lib/types/sort.type';
-export * from './lib/types/sort-direction.type';
-export * from './lib/types/selection.type';
-export * from './lib/types/click.type';
-export * from './lib/types/table-column.type';
-export * from './lib/types/sort-prop-dir.type';
-export * from './lib/types/contextmenu.type';
+export * from './lib/components/datatable.interface';
 
 // utils
 export * from './lib/utils/id';

@@ -3,9 +3,9 @@ import { DebugElement, PipeTransform } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import {} from 'jasmine';
 
-import { DataTableBodyRowComponent } from '../body-row.component';
-import { DataTableBodyCellComponent } from '../body-cell.component';
-import { DataTableSummaryRowComponent, ISummaryColumn } from './summary-row.component';
+import { DataTableBodyRowComponent } from '../body-row/body-row.component';
+import { DataTableBodyCellComponent } from '../body-cell/body-cell.component';
+import { DataTableSummaryRowComponent, SummaryColumn } from './summary-row.component';
 import { ScrollbarHelper } from '../../../services/scrollbar-helper.service';
 import { setColumnDefaults } from '../../../utils/column-helper';
 
@@ -15,7 +15,7 @@ describe('DataTableSummaryRowComponent', () => {
   let element: DebugElement;
 
   let rows: any[];
-  let columns: ISummaryColumn[];
+  let columns: SummaryColumn[];
 
   beforeEach(() => {
     rows = [{ col1: 10, col2: 20 }, { col1: 1, col2: 30 }];

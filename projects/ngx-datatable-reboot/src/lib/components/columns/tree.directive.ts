@@ -1,6 +1,6 @@
 import { Directive, TemplateRef } from '@angular/core';
 
 @Directive({ selector: '[ngx-datatable-tree-toggle]' })
-export class DataTableColumnCellTreeToggle {
+export class DataTableColumnCellTreeToggleDirective {
   constructor(public template: TemplateRef<any>) {}
 }

@@ -15,55 +15,16 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { TableColumn } from '../../types/table-column.type';
-import { MouseEvent, KeyboardEvent } from '../../events';
-import { SortDirection } from '../../types/sort-direction.type';
-import { Keys } from '../../utils/keys';
+import { MouseEvent, KeyboardEvent } from '../../../events';
+import { Keys } from '../../../utils/keys';
+import { SortDirection, TableColumn } from '../../datatable.interface';
 
 export type TreeStatus = 'collapsed' | 'expanded' | 'loading' | 'disabled';
 
 @Component({
   selector: 'datatable-body-cell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="datatable-body-cell-label" [style.margin-left.px]="calcLeftMargin(column, row)">
-      <label
-        *ngIf="column.checkboxable && (!displayCheck || displayCheck(row, column, value))"
-        class="datatable-checkbox"
-      >
-        <input type="checkbox" [checked]="isSelected" (click)="onCheckboxChange($event)" />
-      </label>
-      <ng-container *ngIf="column.isTreeColumn">
-        <button
-          *ngIf="!column.treeToggleTemplate"
-          class="datatable-tree-button"
-          [disabled]="treeStatus === 'disabled'"
-          (click)="onTreeAction()"
-        >
-          <span>
-            <i *ngIf="treeStatus === 'loading'" class="icon datatable-icon-collapse"></i>
-            <i *ngIf="treeStatus === 'collapsed'" class="icon datatable-icon-up"></i>
-            <i *ngIf="treeStatus === 'expanded' || treeStatus === 'disabled'" class="icon datatable-icon-down"></i>
-          </span>
-        </button>
-        <ng-template
-          *ngIf="column.treeToggleTemplate"
-          [ngTemplateOutlet]="column.treeToggleTemplate"
-          [ngTemplateOutletContext]="{ cellContext: cellContext }"
-        >
-        </ng-template>
-      </ng-container>
-
-      <span *ngIf="!column.cellTemplate" [title]="sanitizedValue" [innerHTML]="value"> </span>
-      <ng-template
-        #cellTemplate
-        *ngIf="column.cellTemplate"
-        [ngTemplateOutlet]="column.cellTemplate"
-        [ngTemplateOutletContext]="cellContext"
-      >
-      </ng-template>
-    </div>
-  `
+  templateUrl: 'body-cell.component.html'
 })
 export class DataTableBodyCellComponent implements DoCheck, OnDestroy {
   @Input() displayCheck: (row: any, column?: TableColumn, value?: any) => boolean;
