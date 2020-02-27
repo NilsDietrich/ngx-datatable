@@ -1,0 +1,26 @@
+{
+  "name": "ngx-datatable-reboot",
+  "version": "1.0.0",
+  "description": "Reboot project for ngx-datatable",
+  "peerDependencies": {
+    "@angular/common": "<9.0.0",
+    "@angular/core": "<9.0.0",
+    "@angular/platform-browser": "<9.0.0",
+    "rxjs": "^6.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NilsDietrich/ngx-datatable"
+  },
+  "keywords": [
+    "angularjs",
+    "angular",
+    "javascript",
+    "datatable",
+    "grid",
+    "table"
+  ],
+  "author": "Nils Dietrich",
+  "license": "MIT",
+  "homepage": "https://github.com/NilsDietrich/ngx-datatable"
+}

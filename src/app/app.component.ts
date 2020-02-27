@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy, Location } from '@angular/common';
-import packageInfo from 'projects/swimlane/ngx-datatable/package.json';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +7,9 @@ import packageInfo from 'projects/swimlane/ngx-datatable/package.json';
   encapsulation: ViewEncapsulation.None,
   styleUrls: [
     './app.component.scss',
-    '../../projects/swimlane/ngx-datatable/src/lib/themes/material.scss',
-    '../../projects/swimlane/ngx-datatable/src/lib/themes/dark.scss',
-    '../../projects/swimlane/ngx-datatable/src/lib/themes/bootstrap.scss'
+    '../../projects/ngx-datatable-reboot/src/lib/themes/material.scss',
+    '../../projects/ngx-datatable-reboot/src/lib/themes/dark.scss',
+    '../../projects/ngx-datatable-reboot/src/lib/themes/bootstrap.scss'
   ],
   providers: [
     Location,
@@ -23,7 +22,7 @@ import packageInfo from 'projects/swimlane/ngx-datatable/package.json';
 export class AppComponent {
   state: any;
 
-  version = packageInfo.version;
+  version = '1.0.0';
 
   constructor(location: Location) {
     this.state = location.path(true);

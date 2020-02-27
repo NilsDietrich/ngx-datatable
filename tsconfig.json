@@ -11,14 +11,20 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2018", "dom"],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "paths": {
-      "@swimlane/ngx-datatable": ["dist/swimlane/ngx-datatable"],
-      "@swimlane/ngx-datatable/*": ["dist/swimlane/ngx-datatable/*"]
+      "dynamic-data": [
+        "dist/ngx-datatable-reboot"
+      ],
+      "dynamic-data/*": [
+        "dist/ngx-datatable-reboot/*"
+      ]
     }
   },
   "angularCompilerOptions": {
@@ -26,3 +32,4 @@
     "strictInjectionParameters": true
   }
 }
+
