@@ -101,6 +101,9 @@ export interface TableColumn {
   /** Whether the column can automatically resize to fill space in the table. */
   canAutoResize?: boolean;
 
+  /** Identifier for Column */
+  colID?: string;
+
   /** Column name or label */
   name?: string;
 
